@@ -10,6 +10,7 @@ const state = {
 };
 
 const render = () => {
+    console.log(state);
     if (state.formValid === false) {
         descriptionInput.classList.add('is-invalid');
         return;
@@ -38,6 +39,9 @@ const taskItemTemplate = (task) => {
     const tr = document.createElement('tr');
     const description = document.createElement('td');
     description.textContent = task.description;
+    const author = document.createElement('td');
+    author.classList.add('text-center');
+    author.textContent = task.user;
 
     const completed = document.createElement('td');
     let doneEl;
@@ -54,7 +58,7 @@ const taskItemTemplate = (task) => {
 
     completed.append(doneEl);
 
-    tr.append(description, completed);
+    tr.append(description, author, completed);
     return tr;
 };
 

@@ -21,6 +21,7 @@ public class ItemAdapterJson implements JsonSerializer<Item>, JsonDeserializer<I
         result.add("created",
                 new JsonPrimitive(DATE_FORMAT.get().format(item.getCreated().toLocalDateTime())));
         result.add("done", new JsonPrimitive(item.isDone()));
+        result.add("user", new JsonPrimitive(item.getUser().getName()));
         return result;
     }
 

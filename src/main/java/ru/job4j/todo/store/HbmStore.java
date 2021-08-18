@@ -6,7 +6,10 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
+
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -63,6 +66,28 @@ public class HbmStore implements Store, AutoCloseable {
                 session -> {
                     session.update(item);
                     return item;
+                }
+        );
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return tx(
+                session -> {
+                    String hql = "from User where email = :paramEmail";
+                    Query query = session.createQuery(hql);
+                    query.setParameter("paramEmail", email);
+                    return (User) query.uniqueResult();
+                }
+        );
+    }
+
+    @Override
+    public User saveUser(User user) {
+        return tx(
+                session -> {
+                    session.save(user);
+                    return user;
                 }
         );
     }

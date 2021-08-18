@@ -14,6 +14,10 @@ public class Item {
     private Timestamp created;
     private boolean done;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Item() {
     }
 
@@ -62,6 +66,14 @@ public class Item {
         this.done = done;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -74,12 +86,13 @@ public class Item {
         return id == item.id
                 && done == item.done
                 && description.equals(item.description)
-                && created.equals(item.created);
+                && created.equals(item.created)
+                && user.equals(item.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, created, done);
+        return Objects.hash(id, description, created, done, user);
     }
 
     @Override
@@ -89,6 +102,7 @@ public class Item {
                 + ", description='" + description + '\''
                 + ", created=" + created
                 + ", done=" + done
+                + ", user=" + user
                 + '}';
     }
 }

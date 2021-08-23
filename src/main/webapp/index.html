@@ -22,60 +22,48 @@
 </head>
 <body>
 <div class="container">
-    <div class="row mt-3">
+    <div class="row mt-3 mb-2">
         <div class="col">
-            <h1 class="h2">TODO List</h1>
+            <h1 class="text-center">TODO List</h1>
         </div>
     </div>
     <div class="row mb-2">
         <div class="col">
+            <h2 class="h4 block text-center">Add new task</h2>
             <form>
-                <div class="form-row align-items-center">
-                    <div class="col-8">
-                        <input class="form-control mr-2" type="text" name="description"
-                               placeholder="Enter your task">
-                        <div class="invalid-feedback">
-                            Enter description!
-                        </div>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-primary">Add</button>
-                    </div>
+                <div class="form-group">
+                    <input class="form-control mr-2" type="text" name="description" placeholder="Enter your task" required>
                 </div>
+                <div class="form-group">
+                    <select class="custom-select" size="3" multiple name="categories" required>
+                    </select>
+                </div>
+                <button class="btn btn-primary">Add</button>
             </form>
+            <div class="row mt-3">
+                <div class="col">
+                    <a href="logout.do">Сменить пользователя</a>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="row mb-4">
         <div class="col">
-            <label>
+            <h2 class="h4 text-center">Your tasks</h2>
+            <label class="block">
                 <input type="checkbox" name="showAll">
                 Show all tasks
             </label>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <h2 class="h4">Your tasks</h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-9">
-            <table class="table table-bordered table-hover" >
+            <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" class="col-10 text-center">Description</th>
-                    <th scope="col" class="col-10 text-center">Author</th>
+                    <th scope="col" class="col text-center">Description</th>
+                    <th scope="col" class="col text-center">Author</th>
+                    <th scope="col" class="col text-center">Categories</th>
                     <th scope="col" class="text-center">Completed</th>
                 </tr>
                 </thead>
                 <tbody id="task-list">
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <a href="logout.do">Сменить пользователя</a>
         </div>
     </div>
 </div>

@@ -2,9 +2,11 @@ package ru.job4j.todo.servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.HbmStore;
+import ru.job4j.todo.store.Store;
 import ru.job4j.todo.utils.ItemAdapterJson;
 
 import javax.servlet.http.HttpServlet;
@@ -25,9 +27,13 @@ public class ToDoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         resp.setContentType("application/json; charset=utf-8");
-        Collection<Item> items = HbmStore.instOf().getAllItems();
+        Store store = HbmStore.instOf();
+        Collection<Item> items = store.getAllItems();
+        Collection<Category> categories = store.getAllCategories();
         OutputStream output = resp.getOutputStream();
-        String json = GSON.toJson(items);
+        String json1 = GSON.toJson(items);
+        String json2 = GSON.toJson(categories);
+        String json = String.format("{\"items\": %s, \"categories\": %s}", json1, json2);
         output.write(json.getBytes(StandardCharsets.UTF_8));
         output.flush();
         output.close();

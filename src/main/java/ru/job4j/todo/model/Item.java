@@ -2,6 +2,8 @@ package ru.job4j.todo.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,10 +15,11 @@ public class Item {
     private String description;
     private Timestamp created;
     private boolean done;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    private List<Category> categories = new ArrayList<>();
 
     public Item() {
     }
@@ -32,6 +35,10 @@ public class Item {
         this.description = description;
         this.created = created;
         this.done = done;
+    }
+
+    public void addCategory(Category category) {
+        categories.add(category);
     }
 
     public int getId() {
@@ -74,6 +81,10 @@ public class Item {
         this.user = user;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -85,14 +96,15 @@ public class Item {
         Item item = (Item) o;
         return id == item.id
                 && done == item.done
-                && description.equals(item.description)
-                && created.equals(item.created)
-                && user.equals(item.user);
+                && Objects.equals(description, item.description)
+                && Objects.equals(created, item.created)
+                && Objects.equals(user, item.user)
+                && Objects.equals(categories, item.categories);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, created, done, user);
+        return Objects.hash(id, description, created, done, user, categories);
     }
 
     @Override
@@ -103,6 +115,7 @@ public class Item {
                 + ", created=" + created
                 + ", done=" + done
                 + ", user=" + user
+                + ", categories=" + categories
                 + '}';
     }
 }

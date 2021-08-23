@@ -2,22 +2,15 @@ const taskList = document.querySelector('#task-list');
 const form = document.querySelector('form');
 const showAllInput = document.querySelector('input[name=showAll]');
 const descriptionInput = form.querySelector('input[name=description]');
+const selectCategory = document.querySelector('select[name=categories]');
 
 const state = {
     tasks: [],
     showAllTasks: false,
-    formValid: true,
+    categories: [],
 };
 
 const render = () => {
-    console.log(state);
-    if (state.formValid === false) {
-        descriptionInput.classList.add('is-invalid');
-        return;
-    } else {
-        descriptionInput.classList.remove('is-invalid');
-    }
-
     taskList.innerHTML = '';
     if (state.showAllTasks) {
         state.tasks
@@ -33,6 +26,11 @@ const render = () => {
             .filter((task) => !task.done)
             .forEach((task) => taskList.prepend(taskItemTemplate(task)));
     }
+
+    selectCategory.innerHTML = '';
+    state.categories.forEach(category => {
+       selectCategory.insertAdjacentHTML('beforeend', `<option value="${category.id}">${category.name}</option>`);
+    });
 };
 
 const taskItemTemplate = (task) => {
@@ -42,6 +40,9 @@ const taskItemTemplate = (task) => {
     const author = document.createElement('td');
     author.classList.add('text-center');
     author.textContent = task.user;
+
+    const categories = document.createElement('td');
+    categories.textContent = task.categories.map(id => state.categories.find(cat => cat.id === id).name).join(', ');
 
     const completed = document.createElement('td');
     let doneEl;
@@ -58,22 +59,23 @@ const taskItemTemplate = (task) => {
 
     completed.append(doneEl);
 
-    tr.append(description, author, completed);
+    tr.append(description, author, categories, completed);
     return tr;
 };
 
 const getAllTasks = async () => {
     try {
         const response = await axios.get('http://localhost:8080/todo/tasks');
-        state.tasks = response.data;
+        state.tasks = response.data.items;
+        state.categories = response.data.categories;
     } catch (error) {
         console.error(error);
     }
 };
 
-const addTask = async (description) => {
+const addTask = async (description, categories) => {
     try {
-        const data = { description };
+        const data = { description, categories };
         const response = await axios.post('http://localhost:8080/todo/tasks', data);
         state.tasks.push(response.data);
     } catch (error) {
@@ -90,7 +92,7 @@ const updateTask = async (task) => {
     } catch (error) {
         console.error(error);
     }
-}
+};
 
 const onDocumentLoadHandler = () => getAllTasks().then(render);
 
@@ -105,16 +107,9 @@ const onFormSubmitHandler = async (e) => {
     const {target} = e;
     const formData = new FormData(target);
     const description = formData.get('description');
+    const categories = formData.getAll('categories');
 
-    if (description === '') {
-        state.formValid = false;
-        render();
-        return;
-    } else {
-        state.formValid = true;
-    }
-
-    await addTask(description)
+    await addTask(description, categories)
         .then(render);
 
     form.reset();

@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class ItemAdapterJson implements JsonSerializer<Item>, JsonDeserializer<Item> {
     private static final ThreadLocal<DateTimeFormatter> DATE_FORMAT
@@ -22,7 +23,8 @@ public class ItemAdapterJson implements JsonSerializer<Item>, JsonDeserializer<I
         result.add("id", new JsonPrimitive(item.getId()));
         result.add("description", new JsonPrimitive(item.getDescription()));
         result.add("created",
-                new JsonPrimitive(DATE_FORMAT.get().format(item.getCreated().toLocalDateTime())));
+                new JsonPrimitive(DATE_FORMAT.get()
+                        .format(new Timestamp(item.getCreated().getTime()).toLocalDateTime())));
         result.add("done", new JsonPrimitive(item.isDone()));
         result.add("user", new JsonPrimitive(item.getUser().getName()));
         JsonArray categories = new JsonArray();
@@ -46,7 +48,7 @@ public class ItemAdapterJson implements JsonSerializer<Item>, JsonDeserializer<I
             item = new Item(description);
         } else {
             int id = idElement.getAsInt();
-            Timestamp created = Timestamp.valueOf(
+            Date created = Timestamp.valueOf(
                     LocalDateTime.from(DATE_FORMAT.get().parse(object.get("created").getAsString()))
             );
             boolean done = object.get("done").getAsBoolean();

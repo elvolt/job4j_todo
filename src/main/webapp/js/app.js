@@ -29,7 +29,7 @@ const render = () => {
 
     selectCategory.innerHTML = '';
     state.categories.forEach(category => {
-       selectCategory.insertAdjacentHTML('beforeend', `<option value="${category.id}">${category.name}</option>`);
+        selectCategory.insertAdjacentHTML('beforeend', `<option value="${category.id}">${category.name}</option>`);
     });
 };
 
@@ -40,6 +40,12 @@ const taskItemTemplate = (task) => {
     const author = document.createElement('td');
     author.classList.add('text-center');
     author.textContent = task.user;
+
+    const created = document.createElement('td');
+    const ms = Date.parse(task.created);
+    const date = new Date(ms);
+    created.textContent =
+        `${date.getDate()}.${("0" + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
 
     const categories = document.createElement('td');
     categories.textContent = task.categories.map(id => state.categories.find(cat => cat.id === id).name).join(', ');
@@ -59,7 +65,7 @@ const taskItemTemplate = (task) => {
 
     completed.append(doneEl);
 
-    tr.append(description, author, categories, completed);
+    tr.append(description, author, created, categories, completed);
     return tr;
 };
 
@@ -75,7 +81,7 @@ const getAllTasks = async () => {
 
 const addTask = async (description, categories) => {
     try {
-        const data = { description, categories };
+        const data = {description, categories};
         const response = await axios.post('http://localhost:8080/todo/tasks', data);
         state.tasks.push(response.data);
     } catch (error) {
@@ -117,12 +123,12 @@ const onFormSubmitHandler = async (e) => {
 };
 
 const onChangeCompletedHandler = (e) => {
-    const { target } = e;
+    const {target} = e;
     if (!target.hasAttribute('data-task-id')) {
         return;
     }
     const currentTask = state.tasks.find((task) => task.id === parseInt(target.dataset.taskId));
-    updateTask({ ...currentTask, done: true })
+    updateTask({...currentTask, done: true})
         .then(render);
 };
 

@@ -20,7 +20,10 @@ public class Item {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    private List<Category> categories = new ArrayList<>();
+    @JoinTable(name = "item_category",
+    joinColumns = { @JoinColumn(name = "item_id") },
+    inverseJoinColumns = { @JoinColumn(name = "category_id") })
+    private final List<Category> categories = new ArrayList<>();
 
     public Item() {
     }

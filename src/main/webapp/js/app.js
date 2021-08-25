@@ -45,7 +45,8 @@ const taskItemTemplate = (task) => {
     const ms = Date.parse(task.created);
     const date = new Date(ms);
     created.textContent =
-        `${date.getDate()}.${("0" + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+        `${date.getDate()}.${("0" + (date.getMonth() + 1)).slice(-2)}.${date.getFullYear()} `
+        + `${("0" + date.getHours()).slice(-2)}:${("0" + date.getMinutes()).slice(-2)}`;
 
     const categories = document.createElement('td');
     categories.textContent = task.categories.map(id => state.categories.find(cat => cat.id === id).name).join(', ');

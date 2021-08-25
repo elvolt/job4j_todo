@@ -20,3 +20,10 @@ CREATE TABLE IF NOT EXISTS category
     id   SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS item_category
+(
+    item_id     INT NOT NULL REFERENCES item (id),
+    category_id INT NOT NULL REFERENCES category (id),
+    PRIMARY KEY (item_id, category_id)
+);

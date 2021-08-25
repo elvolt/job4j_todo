@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.com/elvolt/job4j_todo.svg?branch=master)](https://travis-ci.com/elvolt/job4j_todo)
-[![codecov](https://codecov.io/gh/elvolt/job4j_todo/branch/master/graph/badge.svg?token=LNUCO2XSXA)](https://codecov.io/gh/elvolt/job4j_todo)
 
 # TODO List
 

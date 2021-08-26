@@ -44,13 +44,16 @@ public class ToDoServlet extends HttpServlet {
             throws IOException {
         resp.setContentType("application/json; charset=utf-8");
         Item reqItem = GSON.fromJson(req.getReader(), Item.class);
-        User user = (User) req.getSession().getAttribute("user");
-        reqItem.setUser(user);
         Item item;
         if (reqItem.getId() == 0) {
+            User user = (User) req.getSession().getAttribute("user");
+            reqItem.setUser(user);
             item = HbmStore.instOf().saveItem(reqItem);
         } else {
-            item = HbmStore.instOf().updateItem(reqItem);
+            Store store = HbmStore.instOf();
+            Item currentItem = store.findItemById(reqItem.getId());
+            reqItem.setUser(currentItem.getUser());
+            item = store.updateItem(reqItem);
         }
         OutputStream output = resp.getOutputStream();
         String json = GSON.toJson(item);

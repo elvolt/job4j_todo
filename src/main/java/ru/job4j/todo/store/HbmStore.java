@@ -75,6 +75,13 @@ public class HbmStore implements Store, AutoCloseable {
     }
 
     @Override
+    public Item findItemById(int id) {
+        return tx(
+                session -> session.get(Item.class, id)
+        );
+    }
+
+    @Override
     public User findUserByEmail(String email) {
         return tx(
                 session -> {

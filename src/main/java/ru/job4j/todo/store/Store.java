@@ -13,6 +13,8 @@ public interface Store {
 
     Item updateItem(Item item);
 
+    Item findItemById(int id);
+
     User findUserByEmail(String email);
 
     User saveUser(User user);
